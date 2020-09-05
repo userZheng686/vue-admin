@@ -42,3 +42,8 @@ export function validateEmail(value){
 
     return !reg.test(value) ? true : false
 }
+
+/*
+没有使用export default时 可以同时声明多个export
+文件import 需要花括号
+*/ 
