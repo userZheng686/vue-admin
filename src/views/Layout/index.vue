@@ -1,0 +1,31 @@
+<template>
+    <div id="layout" :class="[menuStatus ? 'close' : 'open']">
+        <LayoutHeader />
+        <LayoutMain />
+        <LayoutNav />
+    </div>
+    
+</template>
+<script>
+import { ref, reactive, isRef, toRefs, onMounted, computed } from "@vue/composition-api";
+import LayoutHeader from './Component/Header'
+import LayoutMain from './Component/Main'
+import LayoutNav from './Component/Nav'
+export default {
+    name:'layout',
+    components:{
+        LayoutHeader,
+        LayoutMain,
+        LayoutNav
+    },
+    setup(props,{root}){
+        const menuStatus = computed(() => root.$store.state.app.isCollapse)
+        return {
+            menuStatus
+        }
+    }
+}
+</script>
+<style lang="scss" scoped>
+
+</style>

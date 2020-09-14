@@ -262,16 +262,30 @@ export default {
                 password: sha1(ruleForm.password),
                 code: ruleForm.code
             }
-
-            Login(requestData).then(response => {
-                let data = response;
-                root.$message({
-                    message: data.message,
-                    type:'success'
+            root.$store.dispatch('app/login',requestData).then(response => {
+                //页面跳转
+                root.$router.push({
+                    name:'Console',
+                    params:{
+                        id: '',
+                        usrs:''
+                    }
                 })
             }).catch(error => {
             
-            })
+            });
+            // Login(requestData).then(response => {
+            //     //页面跳转
+            //     root.$router.push({
+            //         name:'Console',
+            //         params:{
+            //             id: '',
+            //             usrs:''
+            //         }
+            //     })
+            // }).catch(error => {
+            
+            // })
         })
 
         //注册

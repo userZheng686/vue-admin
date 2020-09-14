@@ -10,11 +10,22 @@ module.exports = {
    * webpack配置,see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
    **/
   chainWebpack: (config) => {
+    const svgRule = config.module.rule("svg");     
+    svgRule.uses.clear();     
+    svgRule       
+      .use("svg-sprite-loader")       
+      .loader("svg-sprite-loader")       
+      .options({         
+        symbolId: "icon-[name]",         
+        include: ["./src/icons"]       
+      });  
+
   },
   configureWebpack: (config) => {
     config.resolve = { // 配置解析别名
       extensions: ['.js', '.json', '.vue'],
       alias: {
+        'vue':'vue/dist/vue.js',
         '@': path.resolve(__dirname, './src'),
         'public': path.resolve(__dirname, './public'),
       }
@@ -57,7 +68,7 @@ module.exports = {
         target: "http://www.web-jshtml.cn", //API服务器的地址
         changeOrigin: true ,
         pathRewrite: {
-            '^/devapi': '/productapi'
+            '^/devapi': '/productapi/token'
         },
 
 
