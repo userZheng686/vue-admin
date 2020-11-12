@@ -28,3 +28,35 @@ li.el-submenu{
         background-color: red !important;
     }
 }
+
+.el-input__inner{
+    border: 1px solid #DCDFE6 !important;
+}
+
+/*table样式*/
+div.el-table{
+ td,th {
+    text-align: center;
+ }
+ th {
+    font-weight: bold;
+    color: #344a5f;
+ }
+ td{font-size: 14px;}
+}
+
+/*dialog 样式*/
+.el-dialog__body{
+    padding:30px 47px !important;
+}
+.el-dialog__footer{
+    text-align: center !important;
+    .el-button {width: 150px;margin: 0 11px;}
+}
+
+/*from样式*/
+.el-form{
+    .el-form-item:last-child{
+        margin-bottom: 0 !important;
+    }
+}

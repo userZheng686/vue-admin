@@ -1,0 +1,35 @@
+{
+    "getSms":[{
+        "id":"1",
+        "username": "1257815@qq.com",
+        "module": "login",
+        "code":"111111",
+        "message":"OK",
+        "resCode":"0"
+    },{
+        "id":"2",
+        "username": "1111111@qq.com",
+        "module": "login",
+        "code":"111112",
+        "message":"OK",
+        "resCode":"0"
+    }],
+
+    "register":[{
+        "username":"1257815@qq.com",
+        "password": "5454544",
+        "code": "11111",
+        "message":"OK",
+        "resCode":"0"
+    }],
+
+
+    "login":[{
+        "username": "1111111@qq.com",
+        "password": "5454544",
+        "code": "11111",
+        "message":"OK",
+        "resCode":"0"
+    }]
+    
+}

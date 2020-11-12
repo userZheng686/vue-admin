@@ -6,7 +6,7 @@
 <script>
 export default {
     name:'User',
-    setup(props){}
+    setup(){}
 }
 </script>
 <style lang="scss" scoped>

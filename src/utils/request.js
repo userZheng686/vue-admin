@@ -2,6 +2,9 @@ import axios from 'axios'
 
 import { Message } from 'element-ui'
 
+import {getToKen} from '@/utils/app'
+import { getUserName } from './app';
+
 //创建axios变量，赋给变量service
 
 //手把手撸码前端api，地址http://www.web-jshtml.cn/productApi
@@ -27,8 +30,8 @@ service.interceptors.request.use(function (config) {
     console.log(config)
 
     // 最终目的不是在请求头添加参数
-    config.headers['Tokey'] = '11111111'
-    config.headers['userid'] = '4444444'
+    config.headers['Tokey'] = getToKen()
+    config.headers['UserName'] = getUserName()
     config.headers['sui'] = '33333'
 
 
@@ -50,12 +53,6 @@ service.interceptors.response.use(function (response) {
     }else{
         return Promise.resolve(data)
     }
-    console.log(response)
-
-    return response;
-
-
-
 
 }, function (error) {
     // 对响应错误做点什么

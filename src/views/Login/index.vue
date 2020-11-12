@@ -46,9 +46,9 @@
 <script>
 // base64,md5,sha1
 import sha1 from 'js-sha1'
-import { Message } from 'element-ui'
-import { GetSms,Register,Login } from '@/api/login'
-import {reactive,ref, isRef, toRefs, onMounted} from '@vue/composition-api'
+// import { Message } from 'element-ui'
+import { GetSms,Register } from '@/api/login'
+import {reactive,ref,  onMounted} from '@vue/composition-api'
 import {stripscript,validateEmail,validatePass,validateVcode} from '@/utils/validate'
 export default {
     name:'login',
@@ -263,6 +263,7 @@ export default {
                 code: ruleForm.code
             }
             root.$store.dispatch('app/login',requestData).then(response => {
+                console.log(response)
                 //页面跳转
                 root.$router.push({
                     name:'Console',
@@ -271,8 +272,11 @@ export default {
                         usrs:''
                     }
                 })
+                root.$store.dispatch('category/setItem').then(response => {
+                     console.log(response)
+                })
             }).catch(error => {
-            
+                console.log(error)
             });
             // Login(requestData).then(response => {
             //     //页面跳转
@@ -307,7 +311,7 @@ export default {
                 clearCountDown();
                 console.log(data.message);
             }).catch(error => {
-
+                console.log(error)
             })
         })
 
@@ -344,7 +348,7 @@ export default {
         //生命周期
         //挂载完成
         onMounted(() => {
-
+            
         })
 
         return {

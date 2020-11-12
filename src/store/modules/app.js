@@ -1,6 +1,6 @@
 import {Login} from '@/api/login';
 import { setToKen,setUserName, getUserName, removeToken, removeUserName } from '../../utils/app';
-import { remove } from 'cookie_js';
+// import { remove } from 'cookie_js';
 
 const state = {
     isCollapse: JSON.parse(sessionStorage.getItem('isCollapse')) ||  false,
@@ -50,7 +50,7 @@ const actions = {
        })
     },
     exit(content){
-        return new Promise((resolve,reject) => {
+        return new Promise((resolve) => {
             removeToken();
             removeUserName();
             content.commit('SET_TOKEN','');

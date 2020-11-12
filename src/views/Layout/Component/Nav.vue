@@ -30,7 +30,7 @@
   </div>
 </template>
 <script>
-import { ref, reactive, isRef, toRefs, onMounted, computed } from "@vue/composition-api";
+import {  reactive,  computed } from "@vue/composition-api";
 export default {
   name: "navMenu",
   setup(props, { root }) {

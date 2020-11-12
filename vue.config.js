@@ -2,10 +2,10 @@ const path = require('path');
 module.exports = {
   // 基本路径
   publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
+
   // 输出文件目录
   outputDir: process.env.NODE_ENV === 'production' ? 'dist' : 'devdist',
-  // eslint-loader 是否在保存的时候检查
-  lintOnSave: false,
+
   /**
    * webpack配置,see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
    **/
@@ -21,6 +21,7 @@ module.exports = {
       });  
 
   },
+
   configureWebpack: (config) => {
     config.resolve = { // 配置解析别名
       extensions: ['.js', '.json', '.vue'],
@@ -31,8 +32,10 @@ module.exports = {
       }
     }
   },
+
   // 生产环境是否生成 sourceMap 文件
   productionSourceMap: false,
+
   // css相关配置
   css: {
     // 是否使用css分离插件 ExtractTextPlugin
@@ -47,13 +50,16 @@ module.exports = {
       }
     }
   },
+
   // use thread-loader for babel & TS in production build
   // enabled by default if the machine has more than 1 cores
   parallel: require('os').cpus().length > 1,
+
   /**
    *  PWA 插件相关配置,see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
    */
   pwa: {},
+
   // webpack-dev-server 相关配置
   devServer: {
     open: false, // 编译完成是否打开网页
@@ -65,10 +71,11 @@ module.exports = {
     proxy: null, // 设置代理
     proxy:{
       '/devapi' : {
-        target: "http://www.web-jshtml.cn", //API服务器的地址
+        //http://www.web-jshtml.cn/productapi/token
+        target: "http://www.web-jshtml.cn/productapi/token", //API服务器的地址
         changeOrigin: true ,
         pathRewrite: {
-            '^/devapi': '/productapi/token'
+            '^/devapi': ''
         },
 
 
@@ -81,6 +88,7 @@ module.exports = {
     before: app => {
     }
   },
+
   /**
    * 第三方插件配置
    */

@@ -8,13 +8,15 @@
     </div>
 </template>
 <script>
-import { ref, reactive, isRef, toRefs, onMounted, computed } from "@vue/composition-api";
+import { ref} from "@vue/composition-api";
 
 export default {
     name:'layoutMain',
-    setup(props,{root}){
+    setup(){
         const str = ref("{name:'手把手撸码',title:'aaa'}");
-
+        return {
+            str
+        }
     }
     
 }
