@@ -72,6 +72,15 @@ import Layout from '@/views/Layout'
           name:"信息分类"
         },
         component:() => import('../views/Info/category.vue'),
+      },
+      {
+        path:'/infoDetail',
+        name:'infoDetail',
+        hidden : true,
+        meta:{
+          name:"信息详情"
+        },
+        component:() => import('../views/Info/detail.vue'),
       }
     ]
   },

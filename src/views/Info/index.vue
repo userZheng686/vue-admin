@@ -67,6 +67,9 @@
                     <template slot-scope="scope">
                         <el-button type="danger" size="mini" @click="deleteItem(Number(scope.row.id))">删除</el-button>
                         <el-button type="success" size="mini" @click="editInfo(scope.row.id,scope.row.categoryId,scope.row.title,scope.row.content)">编辑</el-button>
+                        <el-button type="success" size="mini" @click="detailInfo(scope.row.id,scope.row.categoryId,scope.row.title,scope.row.content)">编辑详情</el-button>
+                       
+                        
                     </template>
                 </el-table-column>
             </el-table>
@@ -105,7 +108,6 @@ import DialogEditInfo from "./dialog/edit"
 import {timestampToTime,getExactTime,getSession,setSession} from '../../utils/common'
 import {onBeforeMount, onMounted, reactive,ref} from '@vue/composition-api'
 import {deleteInfo} from '../../utils/global'
-import {getCategory} from '@/api/common';
 export default {
     name:'infoIndex',
     components:{DialogInfo,DialogEditInfo},
@@ -392,6 +394,17 @@ export default {
             dialog_info_edit.value = true
         }
 
+        const detailInfo = (id,cateogoryId,title,content) => {
+            let params = {id:id,categoryId:cateogoryId,title:title,content:content,pageNumber:page.pageNumber,pageSize:page.pageSize}
+            params.categoryName = select.category.filter(item => item.id === cateogoryId)[0].category_name
+            let routeData = root.$router.resolve({
+                name : 'infoDetail',
+                query : params
+                
+            })
+            window.open(routeData.href, 'blank')
+        }
+
         return {
             // ref
             dialog_info,dialog_info_edit,
@@ -399,10 +412,10 @@ export default {
             page, select, info_edit,table_data, search_option,
             // vue 2.0 methods
             closeDialog,closeDialogInfo,deleteItem,deleteAll,toDate,
-            toCategory,toMove,getCategory,getList,
+            toCategory,toMove,getList,
             onMounted,search,
             handleSizeChange,handleCurrentChange,handlePrevClick,
-            handleNextClick,handleSelectionChange,editInfo
+            handleNextClick,handleSelectionChange,editInfo,detailInfo
         }
     }
 }
