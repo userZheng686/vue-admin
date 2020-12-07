@@ -26,6 +26,10 @@ export default {
 
         const exit = () => {
             root.$store.dispatch('app/exit').then(() => {
+                sessionStorage.clear();
+                localStorage.clear();
+                //想清空vuex中的数据，让页面重新加载就行了
+                window.location.reload()
                 root.$router.push({
                     name:'Login'
                 })
