@@ -56,10 +56,10 @@ export default {
 }
 
 .open{
-  #header-wrap{left:$navMenu;}
+  #header-wrap{left:$navMenu;z-index: 999;min-width: 500px;}
 }
 .close{
-  #header-wrap{left: $navMenuMin;}
+  #header-wrap{left: $navMenuMin;z-index: 999;min-width: 446px;}
 }
 
 .header-icon {
@@ -86,6 +86,22 @@ export default {
     }
 }
 
+.pull-left::after{
+    content:"";				/*设置内容为空*/
+    height:0;				/*高度为0*/
+    line-height:0;			/*行高为0*/
+    display:block;			/*将文本转为块级元素*/
+    visibility:hidden;		/*将元素隐藏*/
+    clear:both;				/*清除浮动*/
+}
 
+.pull-right::after{
+    content:"";				/*设置内容为空*/
+    height:0;				/*高度为0*/
+    line-height:0;			/*行高为0*/
+    display:block;			/*将文本转为块级元素*/
+    visibility:hidden;		/*将元素隐藏*/
+    clear:both;				/*清除浮动*/
+}
 
 </style>

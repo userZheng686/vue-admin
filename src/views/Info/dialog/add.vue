@@ -34,7 +34,7 @@ export default {
     state: {
       type: Object,
       default: () => {},
-    },
+    }
   },
   components: { DialogIndex },
   setup(props,{emit}) {
@@ -51,7 +51,7 @@ export default {
       /*
        * 新增弹窗配置
        */
-      title: "编辑",
+      title: "新增",
       label: [
         { field: "categoryId", name: "类型:", slotName: "categoryId" },
         { field: "title", name: "标题:", slotName: "title" },
@@ -65,15 +65,15 @@ export default {
         title: [{ required: true, message: "请输入标题", trigger: "blur" }],
         content: [{ required: true, message: "请输入概况", trigger: "blur" }],
       },
-      actions: props.state.actions.edit,
+      actions: props.state.actions.add,
     });
 
     const data = reactive({
       input: {
         id: "",
         categoryId: "",
-        title: "",
         options : [],
+        title: "",
         content: "",
         imgUrl : ""
       },
@@ -83,12 +83,7 @@ export default {
      * 加载传进来的props值
      */
     async function loadingProps(value) {
-      let obj = data.input;
-      for (let key in value) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          obj[key] = value[key];
-        }
-      }
+      data.input.options = value
     }
 
     

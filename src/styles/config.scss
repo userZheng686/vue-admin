@@ -4,8 +4,12 @@ $navMenu: 250px;
 $navMenuMin:64px;
 // 主颜色
 $mainCcolor:#f56c6c;
-
 $layoutHeader: 75px;
+// 页面字体尺寸
+$baseFontSize:16;//基数
+$mainWidth:1200px;
+
+
 
 @mixin webkit($type,$value) {
   -webkit-#{$type}: $value;
@@ -27,3 +31,8 @@ $layoutHeader: 75px;
       
   }
 }
+
+@mixin px2rem($name,$px){
+  #{$name}: $px / $baseFontSize * 1rem ;
+}
+

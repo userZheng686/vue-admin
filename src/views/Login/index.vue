@@ -49,7 +49,7 @@ import sha1 from 'js-sha1'
 // import { Message } from 'element-ui'
 import { GetSms,Register } from '@/api/login'
 import {reactive,ref,  onMounted} from '@vue/composition-api'
-import {stripscript,validateEmail,validatePass,validateVcode} from '@/utils/validate'
+import {stripscript,validateEmail,regexpPass,validateUsername,validateVcode} from '@/utils/validate'
 export default {
     name:'login',
     //组件
@@ -66,31 +66,21 @@ export default {
     setup(props,{refs,root}){
         //这里面放置data数据，生命周期，自定义的函数
 
-         // 验证用户名
-        var validateUsername = (rule, value, callback) => {
-            if (model.value === '') {
-                callback(new Error('请输入用户名'));
-            } else if(validateEmail(value)){
-                callback(new Error('用户名格式有误'));
-            } else {
-                callback(); //true
-            }
-        };
         // 验证密码
-        var validatePassword = (rule, value, callback) => {
+        let validatePassword = (rule, value, callback) => {
             //过滤后的数据
             ruleForm.password = stripscript(value);
             value = ruleForm.password;
             if (value === '') {
             callback(new Error('请输入密码'));
-            } else if (validatePass(value)) {
+            } else if (!regexpPass(value)) {
             callback(new Error('密码为6至20位数字加字母'));
             } else {
             callback();
             }
         };
         // 验证重复密码
-        var validatePasswords = (rule, value, callback) => {
+        let validatePasswords = (rule, value, callback) => {
             //如果模块值为login 就通过
             if(model.value === 'login'){callback();}
             //过滤后的数据
@@ -105,7 +95,7 @@ export default {
             }
         };
         // 验证验证码
-        var validateCode = (rule, value, callback) => {
+        let validateCode = (rule, value, callback) => {
             ruleForm.code = stripscript(value);
             value = ruleForm.code;
             if (model.value === '') {

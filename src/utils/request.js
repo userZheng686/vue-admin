@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { Message } from 'element-ui'
+
 
 import {getToKen} from '@/utils/app'
 import { getUserName } from './app';
@@ -9,12 +9,13 @@ import { getUserName } from './app';
 
 //手把手撸码前端api，地址http://www.web-jshtml.cn/productApi
 
-const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/devapi';
+const BASEURL = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_API : process.env.VUE_APP_API;
 
 const service = axios.create({
     baseURL:BASEURL,
     timeout:15000
 })
+
 
 
 
@@ -25,14 +26,13 @@ service.interceptors.request.use(function (config) {
     // Tokey
     // userid
     // sui
-    console.log(config.headers)
-    // 业务需求
-    console.log(config)
+    // console.log(config.headers)
+    // // 业务需求
+    // console.log(config)
 
     // 最终目的不是在请求头添加参数
     config.headers['Tokey'] = getToKen()
     config.headers['UserName'] = getUserName()
-    config.headers['sui'] = '33333'
 
 
     return config;
@@ -48,7 +48,6 @@ service.interceptors.response.use(function (response) {
     // 业务需求
 
     if(data.resCode != 0){
-        Message.error(data.message)
         return Promise.reject(data)
     }else{
         return Promise.resolve(data)

@@ -1,4 +1,8 @@
 const path = require('path');
+// 导入compression-webpack-plugin
+const CompressionPlugin = require('compression-webpack-plugin');
+// 定义压缩文件类型
+// const productionGzipExtensions = ['js', 'css']
 module.exports = {
   // 基本路径
   publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
@@ -28,9 +32,21 @@ module.exports = {
       alias: {
         'vue':'vue/dist/vue.js',
         '@': path.resolve(__dirname, './src'),
+        '@c': path.resolve(__dirname,'./src/components'),
+        '@u': path.resolve(__dirname,'./src/utils'),
         'public': path.resolve(__dirname, './public'),
       }
     }
+    plugins = [
+      new CompressionPlugin({
+          algorithm: 'gzip', // 使用gzip压缩
+          test: /\.js$|\.css$/, // 匹配文件名
+          filename: '[path][base].gz[query]', // 压缩后的文件名(保持原文件名，后缀加.gz)
+          minRatio: 1, // 压缩率小于1才会压缩
+          threshold: 10240, // 对超过10k的数据压缩
+          deleteOriginalAssets: false, // 是否删除未压缩的源文件，谨慎设置，如果希望提供非gzip的资源，可不设置或者设置为false（比如删除打包后的gz后还可以加载到原始资源文件）
+      }),
+    ]
   },
 
   // 生产环境是否生成 sourceMap 文件
@@ -77,8 +93,13 @@ module.exports = {
         pathRewrite: {
             '^/devapi': ''
         },
-
-
+      },
+      '/uploadImgToken' : {
+        target: "http://localhost:3000/index/uploadImgToken", //API服务器的地址
+        changeOrigin: true ,
+        pathRewrite: {
+            '^/uploadImgToken': ''
+        },
       }
     },
     overlay: { // 全屏模式下是否显示脚本错误
@@ -92,5 +113,7 @@ module.exports = {
   /**
    * 第三方插件配置
    */
-  pluginOptions: {}
+  pluginOptions: {},
+
+ 
 }

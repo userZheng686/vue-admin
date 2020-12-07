@@ -24,7 +24,6 @@ export default {
 <style lang="scss" scoped>
 @import "../../../styles/config.scss";
 #main-wrap{
-    height: 100vh;
     background-color: #f7f7f7;
     // position: fixed;
     // left: $navMenu;
@@ -36,12 +35,24 @@ export default {
     // -webkit-box-sizing: border;
 
 }
+
+
+/*内容区域*/
+.content{
+  width: 100%;
+  height: 100%;
+  padding: 30px 30px 0;
+  min-width: $mainWidth;
+  min-height: 81vh;
+  @include webkit(box-sizing,border-box);
+  background-color: #fff;
+}
+
+
 .main-content {
     width: 100%;
     height: 100%;
-    padding-top: $layoutHeader + 30;
-    padding-left: $navMenu + 30;
-    padding-right: 30px;
+    padding : $layoutHeader + 30 20px 30px 20px;
     @include webkit(box-sizing,border-box);
     @include webkit(transition,all .2s ease 0s);
 }
@@ -55,11 +66,4 @@ export default {
 }
 
 
-.content {
-    width: 100%;
-    height: 100%;
-    padding: 30px 30px 0;
-    @include webkit(box-sizing,border-box);
-    background-color: #fff;
-}
 </style>

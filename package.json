@@ -11,6 +11,8 @@
   "dependencies": {
     "@vue/composition-api": "^1.0.0-beta.10",
     "axios": "^0.20.0",
+    "china-region": "^1.2.0",
+    "compression-webpack-plugin": "^6.1.1",
     "cookie_js": "^1.4.0",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",

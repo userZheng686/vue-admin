@@ -12,7 +12,7 @@ export function setToKen(toKen){
     return cookie.set(adminToKen,toKen)
 }
 
-export function removeToken(toKen){
+export function removeToken(){
     return cookie.remove(adminToKen)
 }
 

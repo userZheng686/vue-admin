@@ -1,12 +1,11 @@
-import { GetInfo, AddInfo, EditInfo, DeleteInfo } from '@/api/info';
-// import { reject } from 'core-js/fn/promise';
 
+import { GetUser, AddUser, DeleteUser, EditUser, ActiveUser } from '@/api/user';
 
 const state = {
     item: [],
-    total: 0,
-    detail: {}
+    total: 0
 }
+
 
 const getters = {
     getitem: state => {
@@ -14,37 +13,28 @@ const getters = {
     },
     gettotal: state => {
         return state.total
-    },
-    getdetail : state => {
-        return state.detail
     }
 }
 
-const mutations = {
+const mutations = {  //必须的同步 没有回调处理事情
     SET_ITEM(state, parms) {
         state.item = parms
     },
     SET_TOTAL(state, parms) {
         state.total = parms
     },
-    SET_DETAIL(state, parms) {
-        state.detail = parms.data
-        if(parms.state){
-            sessionStorage.setItem('infoDetail',JSON.stringify(parms.data))
-        }
-    }
 }
 
-const actions = {
+const actions = {  // 可以回调处理事情
     getItem() {
         return state.item
     },
     getTotal() {
-        return Number(state.total)
+        return state.total
     },
     setItem(content, requestData) {
         return new Promise((resolve, reject) => {
-            GetInfo(requestData).then(response => {
+            GetUser(requestData).then(response => {
                 content.commit('SET_ITEM', response.data.data)
                 content.commit('SET_TOTAL', response.data.total)
                 resolve(response.data.data)
@@ -53,45 +43,48 @@ const actions = {
             })
         })
     },
-    searchItem(content, requestData) {
-        return new Promise(() => {
-            GetInfo(requestData).then(response => {
+    searchItem(content,requestData){
+        return new Promise((resolve) => {
+            GetUser(requestData).then(response => {
                 content.commit('SET_ITEM', response.data.data)
                 content.commit('SET_TOTAL', response.data.data.length)
+                resolve(response.data.data)
             })
         })
     },
     addItem(content, requestData) {
         return new Promise((resolve, reject) => {
-            AddInfo(requestData.input).then(response => {
-                let total = actions.getTotal()
+            AddUser(requestData.input).then(response => {
                 let item = actions.getItem()
-                let time = +new Date()
-                let data = {
-                    categoryId: requestData.input.categoryId,
-                    categoryName: null,
-                    content: requestData.input.content,
-                    createDate: time.toString(),
-                    imgUrl: null,
-                    status: null,
-                    title: requestData.input.title
+                let total = actions.getTotal()
+                let obj = {
+                    btnPerm: '1',
+                    id: '',
+                    phone: requestData.input.phone,
+                    region: requestData.input.region,
+                    role: requestData.input.role,
+                    truename: requestData.input.truename,
+                    username: requestData.input.username,
+                    status : requestData.input.status
                 }
+
+                /**添加id */
                 if(item.length === 0){
-                    GetInfo({categoryId:requestData.input.categoryId,startTiem:'',endTime:"",title:requestData.input.title,id:"",pageNumber:"1",pageSize:"10"}).then(responses => {
-                        data.id = responses.data.data[0].id
-                        item.unshift(data)
+                    GetUser({username:"",truename:"",phone:"",pageNumber:1,pageSize:10}).then(responses => {
+                        obj.id = responses.data.data[0].id
+                        item.unshift(obj)
                         total = total + 1
                         content.commit('SET_ITEM', item)
                         content.commit('SET_TOTAL', total)
                     })
                 }else{
-                    data.id = (Number(item[0].id) + 1).toString()
-                    item.unshift(data)
+                    obj.id = Number(item[0].id) + 1 + ''
+                    item.unshift(obj)
                     total = total + 1
                     content.commit('SET_ITEM', item)
                     content.commit('SET_TOTAL', total)
-                } 
-                resolve(response)          
+                }
+                 resolve(response)
             }).catch(error => {
                 reject(error)
             })
@@ -99,7 +92,7 @@ const actions = {
     },
     deleteItem(content, requestData) {
         return new Promise((resolve, reject) => {
-            DeleteInfo(requestData).then(() => {
+            DeleteUser(requestData).then(() => {
                 let item = actions.getItem()
                 let total = actions.getTotal()
                 let number = requestData.pageNumber * requestData.pageSize - requestData.pageSize;
@@ -128,7 +121,7 @@ const actions = {
     },
     editItem(content, requestData) {
         return new Promise((resolve, reject) => {
-            EditInfo(requestData.input).then(response => {
+            EditUser(requestData.input).then(response => {
                 let item = actions.getItem()
                 let index = item.findIndex(item => item.id === requestData.input.id)
                 for (let key in item[index]) {
@@ -139,17 +132,6 @@ const actions = {
                     }
                 }
                 content.commit('SET_ITEM', item)
-                content.commit('SET_DETAIL',{data:requestData.input,state:true})
-                resolve(response)
-            }).catch(error => {
-                reject(error)
-            })
-        })
-    },
-    editDetail(content,requestData){
-        return new Promise((resolve, reject) => {
-            EditInfo(requestData.input).then(response => {
-                content.commit('SET_DETAIL',{data:requestData.input,state:true})
                 resolve(response)
             }).catch(error => {
                 reject(error)
@@ -162,7 +144,7 @@ const actions = {
             let number = requestData.pageNumber * requestData.pageSize - requestData.pageSize
             let arr = new Array()
             if (!item[number]) {
-                GetInfo(requestData).then(response => {
+                GetUser(requestData).then(response => {
                     // content.commit('SET_ITEM', response.data.data)
                     // content.commit('SET_TOTAL', response.data.total)
                     for (let i = 0; i < response.data.data.length; i++) {
@@ -182,21 +164,24 @@ const actions = {
                 }
                 resolve(arr)
             }
+
         })
     },
-    setDetail(content,requestData){
-        return new Promise((resolve) => {
-            let isStorage = sessionStorage.getItem('infoDetail')
-            if(requestData){
-                content.commit('SET_DETAIL',{data:requestData,state:true})
-            }else{
-                content.commit('SET_DETAIL',{data:JSON.parse(isStorage),state:false})
-            }
-            resolve(JSON.parse(isStorage))
-        })
+    changeStatus(content, requestData) {
+       return new Promise((resolve, reject) => {
+          ActiveUser(requestData).then(response => {
+            let item = actions.getItem() 
+            let index = item.findIndex(item => item.id === requestData.id)
+            item[index]['status'] = requestData.status
+            content.commit('SET_ITEM',item)
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
+       }) 
     }
-
 }
+
 
 export default {
     namespaced: true,

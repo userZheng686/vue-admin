@@ -73,6 +73,7 @@ export default {
   left: 0;
   width: $navMenu;
   height: 100vh;
+  z-index: 999;
   background-color: #344a5f;
   @include webkit(transition,all .3s ease 0s);
   svg {

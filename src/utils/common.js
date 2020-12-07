@@ -7,7 +7,7 @@ export function timestampToTime(timestamp)
     var hour=now.getHours();    
     var minute=now.getMinutes();    
     var second=now.getSeconds();    
-    return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;     
+    return   year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;     
 }
 
 export function getExactTime(time) {
@@ -22,12 +22,46 @@ export function getExactTime(time) {
     return year + month + dates + hour + min + second ;
 }
 
-export function getSession(key){
-    let data = sessionStorage.getItem(key)
-    return JSON.parse(data)
+export function prefixZero(num){
+     return num >= 10 ? num : "0" + num;
 }
 
-export function setSession(parms){
-    parms.data = JSON.stringify(parms.data)
-    sessionStorage.setItem(parms.key,parms.data)
+
+export function formatDate(timeStamp) {
+
+    let date = new Date(timeStamp);
+    return date.getFullYear() + "/"
+        + prefixZero(date.getMonth() + 1) + "/"
+        + prefixZero(date.getDate()) + "-"
+        + prefixZero(date.getHours()) + ":"
+        + prefixZero(date.getMinutes());
 }
+
+
+
+/*
+*实现一个防抖函数
+*/
+export function debounce(func,wait = 1000){
+    var context,arg;
+    var timer
+
+    var later = function(){
+        timer = setTimeout(() => {
+            timer = null
+            func.apply(context,timer)
+        }, wait);
+    }
+
+    
+    return function(...args){
+        context = this 
+        arg = args;
+        if(!timer){
+            func.apply(context,arg)
+        }else{
+            later()
+        }
+    }
+}
+

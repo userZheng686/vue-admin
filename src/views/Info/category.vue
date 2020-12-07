@@ -8,7 +8,9 @@
                     <div class="category-wrap">
                         <div class="category" v-for="firstItem in category.item" :key="firstItem.id">
                             <h4>
-                                <svg-icon icon-class="minus"></svg-icon>
+                                <div @click="develop(firstItem)">
+                                    <svg-icon :icon-class="firstItem.icon"></svg-icon>
+                                </div>
                                 {{firstItem.category_name}}
                                 <div class="button-group">
                                     <el-button size="mini" type="danger" round @click="editCategoryName({name:firstItem.category_name,level:1,id:firstItem.id,parentid:''})">编辑</el-button>
@@ -16,7 +18,7 @@
                                     <el-button size="mini" round @click="deleteCategoryConfirm(firstItem.id)">删除</el-button>
                                 </div>
                             </h4>
-                            <ul v-if="firstItem.children">
+                            <ul v-show="firstItem.childShow">
                                 <li v-for="childrenItem in firstItem.children" :key="childrenItem.id">
                                 {{childrenItem.category_name}}
                                 <div class="button-group">
@@ -48,7 +50,7 @@
 </template>
 <script>
 //computed
-import { onBeforeMount,onMounted, reactive, ref } from '@vue/composition-api';
+import { onBeforeMount, reactive, ref, watch } from '@vue/composition-api';
 //deleteInfo
 export default {
     name:'Category',
@@ -58,10 +60,11 @@ export default {
         //ref
         const submit_button_loading = ref(false)
         let edit = ref();
+
         //reactive
         //分类数组
         const category = reactive({
-            item:''
+            item:'',
         })
 
          //reactive
@@ -85,29 +88,52 @@ export default {
             second:true
         })
 
-        const submitName = () => {}
+        const develop = (item) => {
+            if(item.icon === 'plus'){
+                item.icon = 'minus'
+                item.childShow = true
+            }else{
+                item.icon = 'plus'
+                item.childShow = false
+            }
+        }
 
 
         onBeforeMount(() => {
-            let item = root.$store.state.category.item
-            if(item.length === 0){
-                root.$store.dispatch('category/setItem').then(response => {
-                    category.item = response
-                }).catch(error => {
-                    console.log(error)
-                })
-            }else{
-                category.item = root.$store.state.category.item
-            }
-            
-
+            getCategoryAll()
         })
         
-        onMounted(() => {
-           
-            console.log(category.item)
 
-        })
+
+        const getCategoryAll = () => {
+            //先获取有子级分类的
+            let itemAll = root.$store.getters["category/getItemAll"]
+            if(itemAll.length === 0){
+                root.$store.dispatch('category/setItemAll').then(response => {
+                    category.item = response
+                }).catch(error => {
+                    if(error.data != ""){
+                        root.$message({
+                            type : 'error',
+                            message : error 
+                        })
+                    }
+                })
+            }else{
+                category.item = root.$store.getters["category/getItemAll"]
+            }
+
+            //获取没有子级分类的
+            let item = root.$store.getters["category/getItem"]
+            if(item.length === 0){
+                root.$store.dispatch('category/setItem').then(response => {
+                    item = response
+                })
+            }
+
+
+        }
+
 
 
         //methods
@@ -116,7 +142,9 @@ export default {
             const requestData = {
                 id : formLabelAlign.id,
                 name : formLabelAlign.name,
-                parentid : formLabelAlign.parentid
+                parentid : formLabelAlign.parentid,
+                icon : 'plus',
+                childShow : false
             }
             if(edit.value === 1){
                 root.$store.dispatch('category/addCategoryFirst',requestData).then(response => {
@@ -128,7 +156,10 @@ export default {
                         })
                     }
                 }).catch(error => {
-                    console.log(error)
+                    root.$message({
+                        message: error,
+                        type: 'error'
+                    })
                 })
             }else if(edit.value === 2){
                 root.$store.dispatch('category/addCategorySecond',requestData).then(response => {
@@ -140,7 +171,10 @@ export default {
                         })
                     }
                 }).catch(error => {
-                    console.log(error)
+                    root.$message({
+                        message: error,
+                        type: 'error'
+                    })
                 })
             }else{
                 root.$store.dispatch('category/editCategory',requestData).then(response => {
@@ -152,11 +186,20 @@ export default {
                         })
                     }
                 }).catch(error => {
-                    console.log(error)
+                    root.$message({
+                        message: error,
+                        type: 'error'
+                    })
                 })
             }
             resetForm()
         }
+
+        watch(() => root.$store.getters["category/getItemAll"],(newVal) => {
+            if(newVal){
+                category.item  = newVal
+            }
+        })
 
         //删除
         const deleteCategoryConfirm = (categoryID) => {
@@ -172,8 +215,12 @@ export default {
                         type: 'success'
                     })
                 }
+                resetForm()
             }).catch(error => {
-                console.log(error)
+                root.$message({
+                    message: error,
+                    type: 'error'
+                })
             })
         }
 
@@ -260,25 +307,13 @@ export default {
         
         return {
             //ref
-            submit_button_loading,
-            edit,
+            submit_button_loading,edit,
             //reactive
-            formLabelAlign,
-            category,
-            inputShow,
-            inputDisabled,
+            formLabelAlign,category,inputShow,inputDisabled,
             //methods
-            submitName,
-            addFirst,
-            addChildrenbtn,
-            submit,
-            searchParent,
-            firstCategory,
-            secondCategory,
-            resetForm,
-            editCategoryName,
-            deleteCategoryConfirm,
-            onMounted
+            getCategoryAll,develop,addFirst,addChildrenbtn,
+            submit,searchParent,firstCategory,secondCategory,
+            resetForm,editCategoryName,deleteCategoryConfirm,
         }
     }
 }

@@ -1,6 +1,6 @@
 import router from './index';
 import {getToKen} from '@/utils/app';
-import { removeToken } from '../utils/app';
+import { removeUserName,removeToken } from '../utils/app';
 import store from '../store/index';
 
 const whiteRouter = ['/login']

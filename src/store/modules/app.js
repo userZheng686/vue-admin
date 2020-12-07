@@ -31,9 +31,7 @@ const actions = {
        return new Promise((resolve,reject) => {
           //接口
           Login(requestData).then((response) => {
-              console.log(response);
               let data = response.data;
-              console.log(data)
               // 普通的
               // content.commit('SET_TOKEN',data.toKen);
               // content.commit('SET_USERNAME',data.username);
