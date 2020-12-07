@@ -9,7 +9,9 @@ const state = {
 }
 
 const getters = {
-    isCollapse : state => state.isCollapse
+    isCollapse : state => {
+        return state.isCollapse
+    }
 }
 
 const mutations = {

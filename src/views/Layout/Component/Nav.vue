@@ -46,7 +46,7 @@ export default {
     *  computed 监听 
     */
     const isCollapse = computed(() => {
-        return root.$store.state.app.isCollapse
+        return root.$store.getters["app/isCollapse"]
     })
 
 

@@ -48,21 +48,11 @@
 import sha1 from 'js-sha1'
 // import { Message } from 'element-ui'
 import { GetSms,Register } from '@/api/login'
-import {reactive,ref,  onMounted} from '@vue/composition-api'
+import {onMounted, reactive,ref} from '@vue/composition-api'
 import {stripscript,validateEmail,regexpPass,validateUsername,validateVcode} from '@/utils/validate'
 export default {
     name:'login',
     //组件
-
-    // setup(props,context){
-    //     console.log(context)
-        // attrs: (...)  == this.$attrs
-        // emit: (...)  == this.$emit
-        // listeners: (...) == this.$listeners
-        // parent: (...) == this.$parent
-        // refs: (...) == this.$refs
-        // root: (...) == this
-
     setup(props,{refs,root}){
         //这里面放置data数据，生命周期，自定义的函数
 
@@ -180,7 +170,6 @@ export default {
 
         //更新按钮的状态
         const updateButtonStatus = ((params) => {
-            
             codeButtonStatus.status = params.status;
             codeButtonStatus.text = params.text;
         })
@@ -189,6 +178,7 @@ export default {
         //获取验证码
         const getSms = (() => {
             //进行提示
+
             if(ruleForm.username == ''){
                 root.$message.error('邮箱不能为空');
                 return false;
@@ -223,9 +213,11 @@ export default {
                 loginButtonStatus.value = false;
                 // 调用定时器
                 countDown(60);
-                console.log(response.data);
             }).catch(error => {
-                console.log(error);
+                root.$message({
+                    message: error,
+                    type: 'error'
+                })
             })
 
            
@@ -239,7 +231,6 @@ export default {
             if (valid) {
                 model.value === 'login' ? login() : register();
             } else {
-                console.log('error submit!!');
                 return false;
             }
           });
@@ -252,8 +243,7 @@ export default {
                 password: sha1(ruleForm.password),
                 code: ruleForm.code
             }
-            root.$store.dispatch('app/login',requestData).then(response => {
-                console.log(response)
+            root.$store.dispatch('app/login',requestData).then(() => {
                 //页面跳转
                 root.$router.push({
                     name:'Console',
@@ -262,24 +252,13 @@ export default {
                         usrs:''
                     }
                 })
-                root.$store.dispatch('category/setItem').then(response => {
-                     console.log(response)
-                })
+                root.$store.dispatch('category/setItem')
             }).catch(error => {
-                console.log(error)
+                root.$message({
+                    message: error,
+                    type: 'error'
+                })
             });
-            // Login(requestData).then(response => {
-            //     //页面跳转
-            //     root.$router.push({
-            //         name:'Console',
-            //         params:{
-            //             id: '',
-            //             usrs:''
-            //         }
-            //     })
-            // }).catch(error => {
-            
-            // })
         })
 
         //注册
@@ -299,9 +278,11 @@ export default {
                 // 模拟注册成功
                 toggleMenu(menuTab[0]);
                 clearCountDown();
-                console.log(data.message);
             }).catch(error => {
-                console.log(error)
+                root.$message({
+                    message: error,
+                    type: 'error'
+                })
             })
         })
 
@@ -320,7 +301,9 @@ export default {
                     codeButtonStatus.text = '再次获取';
                 }else{
                     codeButtonStatus.text = `倒计时${time}秒`;
+                    codeButtonStatus.status = true
                 }
+                localStorage.setItem('time',time)
             },1000)
 
         })
@@ -334,11 +317,22 @@ export default {
             clearInterval(timer.value);
         })
 
+        //获取本地的倒计时
+        const getTime = () => {
+            root.$nextTick(() => {
+                let time = localStorage.getItem('time')
+                if(time){
+                    countDown(time)
+                }
+            })
+        }
 
-        //生命周期
-        //挂载完成
+
+        
+
+
         onMounted(() => {
-            
+            getTime()
         })
 
         return {
@@ -350,7 +344,8 @@ export default {
             rules,
             toggleMenu,
             submitForm,
-            getSms
+            getSms,
+            getTime
         }
 
 
@@ -373,19 +368,10 @@ export default {
     //函数
     methods: {
         //数据驱动视图渲染
-       
         resetForm(formName) {
             this.$refs[formName].resetFields();
         }
     },
-    //子组件接受父组件的参数
-    props:{
-    
-    },
-    //子组件接受父组件的参数
-    watch:{
-    
-    }
 }
 </script>
 <style lang="scss" scoped>
