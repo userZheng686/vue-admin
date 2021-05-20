@@ -180,7 +180,7 @@ export default {
             //进行提示
 
             if(ruleForm.username == ''){
-                root.$message.error('邮箱不能为空');
+                root.$message.error('邮箱/手机号不能为空');
                 return false;
             }
 
