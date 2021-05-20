@@ -8,7 +8,7 @@
             <el-form :model="ruleForm" status-icon :rules="rules" ref="loginForm" class="login-form" size="medium">
 
                 <el-form-item prop="username" class="item-form">
-                    <label for="username">邮箱</label>
+                    <label for="username">邮箱/手机号</label>
                     <el-input id="username" type="text" v-model="ruleForm.username" autocomplete="off"></el-input>
                 </el-form-item>
 
